@@ -1,7 +1,8 @@
-# Single-file deploy: `docker stack deploy -c docker-swarm.yml cfhost`.
+# Swarm deploy: `docker stack deploy -c docker-swarm.yml cfhost`.
 # Secrets live ONLY here — never commit other copies.
+# App source is cloned into a named volume by entrypoint.sh on first run.
 services:
-  bot:
+  telebot:
     image: python:3-alpine
     environment:
       BOT_TOKEN: "PASTE_TELEGRAM_BOT_TOKEN_HERE"
@@ -10,13 +11,23 @@ services:
       APP_DIR: /app
       # APP_REPO_URL: https://github.com/rohjagad/cf-auto-custom-hostname.git
     volumes:
-      - ./:/app
-      - cfhost-data:/data
+      - telebot-app:/app
+      - telebot-data:/data
     working_dir: /app
     command: ["sh", "/app/entrypoint.sh"]
+    networks:
+      - common-overlay
     deploy:
       restart_policy:
         condition: any
+      placement:
+        constraints:
+          - node.hostname == stb3
+
+networks:
+  common-overlay:
+    external: true
 
 volumes:
-  cfhost-data:
+  telebot-app:
+  telebot-data:

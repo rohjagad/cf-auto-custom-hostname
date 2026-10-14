@@ -21,4 +21,5 @@ Scaffolded Python bot (`bot/`) + `entrypoint.sh` + compose/swarm files per `PLAN
 
 ## Verify
 - No docker daemon here — test with podman via `distrobox-host-exec` (`host-spawn` is broken in this sandbox). `python:3-alpine` pulls/runs fine.
+- arm64 verified: `podman run --arch arm64` under host qemu-aarch64 binfmt — deps install, bot boots to Telegram auth. Base image ships `linux/arm64/v8`, all pip deps pure-Python — do NOT pin `platform:` in compose files.
 - SELinux enforcing: bind mounts need `:z` (use a `/tmp` copy of the repo, not the project dir). Smoke test proven: mount + dummy `BOT_TOKEN` → entrypoint installs deps, inits `/data/state.json`, bot runs up to Telegram auth (`InvalidToken` = success).

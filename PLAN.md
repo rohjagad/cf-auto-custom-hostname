@@ -26,7 +26,7 @@ requirements.txt       # python-telegram-bot, httpx
 entrypoint.sh          # installer + starter, idempotent
 .gitignore             # data/state.json
 docker-compose.yml     # image: python:3-alpine, volumes ./:/app ./data:/data, secrets inline
-docker-swarm.yml       # swarm variant, secrets inline (no env_file: stack ignores it)
+docker-swarm.yml       # service telebot on stb3, external common-overlay net, named volumes, secrets inline
 data/.gitkeep          # state.json lives here at runtime (git-ignored)
 ```
 
