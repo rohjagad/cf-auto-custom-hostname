@@ -1,0 +1,19 @@
+name: cf-auto-custom-hostname
+
+# User flow: copy .env.example to .env, fill in BOT_TOKEN + ALLOWED_CHAT_IDS,
+# then `docker compose up -d`. No image build needed.
+services:
+  bot:
+    image: python:3-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATA_DIR: /data
+      APP_DIR: /app
+      # APP_REPO_URL: https://github.com/rohjagad/cf-auto-custom-hostname.git
+    volumes:
+      - ./:/app
+      - ./data:/data
+    working_dir: /app
+    command: ["sh", "/app/entrypoint.sh"]

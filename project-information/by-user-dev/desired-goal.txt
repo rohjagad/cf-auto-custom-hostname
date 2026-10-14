@@ -1,0 +1,34 @@
+Cloudflare Automatic Custom Hostname
+
+# General Info
+- Docker Based Telegram Bot
+- Use lightweight docker image
+- Installation and starting the app, via entrypoint which will be handover to entrypoint.sh
+- Project will be hosted on public github repo, so that entrypoint can pull all files needed to install the app
+- entrypoint will handle everything (automatic installation)(starting the app) this way, after power outage, app will be started automatically. So that we dont need systemd
+
+# Design of Telegram Bot
+/start -> /manage_domain
+/manage_domain
+  Button1 = Add domain (needs account id and token)
+  Button2 = Delete domain
+  Button3 = Set/Switch domain (to use)
+
+/menu (if domain not set or chosen) -> fallback to /manage_domain
+  Button1 = Add Custom Hostname
+  Button2 = Status (show hostname status and certification status)
+
+also, can you make bot have this hamburger button to show all available command?
+
+# Mechanism
+  Add Custom Hostname -> example "suport.zoom.us.domain.com" -> automatically add TXT record to DNS record -> verified
+
+# Popup after add custom hostname
+  Also add CNAME record? yes/no (button)
+  support.zoom.us (name)
+  target (@)
+  (CNAME)(orange cloud)
+
+  support.zoom.us.domain.com is alias of domain.com
+
+-----
