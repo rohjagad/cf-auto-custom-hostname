@@ -12,7 +12,7 @@ Telegram user ──► bot (python-telegram-bot, long polling)
 
 - Base runtime: `python:3-alpine` pulled by compose — no image build step for the user.
 - `entrypoint.sh` (idempotent): if app source missing → `git clone/pull $APP_REPO_URL`; `pip install -r requirements.txt`; `exec python -m bot`.
-- `.env` holds only `BOT_TOKEN` + `ALLOWED_CHAT_IDS` (see `.env.example`). Everything else (per-domain account ID + API token) is entered through the bot chat and kept only in `/data/state.json` — never in `.env`, code, or the image. `APP_REPO_URL` defaults to the public repo URL baked into `entrypoint.sh` (env-overridable, not part of `.env`).
+- `BOT_TOKEN` + `ALLOWED_CHAT_IDS` live inline in `docker-compose.yml` / `docker-swarm.yml` (single-file deploy, no `.env`). Everything else (per-domain account ID + API token) is entered through the bot chat and kept only in `/data/state.json` — never in code or the image. `APP_REPO_URL` defaults to the public repo URL baked into `entrypoint.sh`.
 - Restart policy (`unless-stopped` / swarm `any-node`) replaces systemd for power-outage recovery; the JSON store on a volume preserves state.
 
 ## 2. Repo layout (to create)
@@ -24,10 +24,9 @@ bot/cf.py              # Cloudflare API client (zones, dns_records, custom_hostn
 bot/store.py           # JSON load/save, domain CRUD
 requirements.txt       # python-telegram-bot, httpx
 entrypoint.sh          # installer + starter, idempotent
-.env.example           # BOT_TOKEN + ALLOWED_CHAT_IDS placeholders only
-.gitignore             # .env, data/state.json
-docker-compose.yml     # image: python:3-alpine, volumes ./:/app ./data:/data, env_file
-docker-swarm.yml       # swarm variant of the above
+.gitignore             # data/state.json
+docker-compose.yml     # image: python:3-alpine, volumes ./:/app ./data:/data, secrets inline
+docker-swarm.yml       # swarm variant, secrets inline (no env_file: stack ignores it)
 data/.gitkeep          # state.json lives here at runtime (git-ignored)
 ```
 

@@ -1,14 +1,14 @@
 name: cf-auto-custom-hostname
 
-# User flow: copy .env.example to .env, fill in BOT_TOKEN + ALLOWED_CHAT_IDS,
-# then `docker compose up -d`. No image build needed.
+# Single-file deploy: copy this file to the server, then `docker compose up -d`.
+# No image build, no .env needed. Secrets live ONLY here — never commit other copies.
 services:
   bot:
     image: python:3-alpine
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
+      BOT_TOKEN: "8558513328:AAE2V0DFl8CwxEcizxaO7HRmO-Ku5ARj80M"
+      ALLOWED_CHAT_IDS: "6713772874"
       DATA_DIR: /data
       APP_DIR: /app
       # APP_REPO_URL: https://github.com/rohjagad/cf-auto-custom-hostname.git

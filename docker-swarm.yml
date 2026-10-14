@@ -1,12 +1,11 @@
-# NOTE: `docker stack deploy` ignores env_file, so BOT_TOKEN and
-# ALLOWED_CHAT_IDS are interpolated from your shell environment:
-#   BOT_TOKEN=... ALLOWED_CHAT_IDS=... docker stack deploy -c docker-swarm.yml cfhost
+# Single-file deploy: `docker stack deploy -c docker-swarm.yml cfhost`.
+# Secrets live ONLY here — never commit other copies.
 services:
   bot:
     image: python:3-alpine
     environment:
-      BOT_TOKEN: ${BOT_TOKEN}
-      ALLOWED_CHAT_IDS: ${ALLOWED_CHAT_IDS}
+      BOT_TOKEN: "8558513328:AAE2V0DFl8CwxEcizxaO7HRmO-Ku5ARj80M"
+      ALLOWED_CHAT_IDS: "6713772874"
       DATA_DIR: /data
       APP_DIR: /app
       # APP_REPO_URL: https://github.com/rohjagad/cf-auto-custom-hostname.git
