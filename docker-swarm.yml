@@ -1,6 +1,8 @@
 # Swarm deploy: `docker stack deploy -c docker-swarm.yml cfhost`.
 # Secrets live ONLY here — never commit other copies.
-# App source is cloned into a named volume by entrypoint.sh on first run.
+# Self-bootstrapping: on first run the app volume is empty, so the command
+# fetches entrypoint.sh (busybox wget, no git needed) and entrypoint.sh
+# then clones the rest of the source itself. Just redeploy — no manual seeding.
 services:
   telebot:
     image: python:3-alpine
@@ -14,7 +16,14 @@ services:
       - telebot-app:/app
       - telebot-data:/data
     working_dir: /app
-    command: ["sh", "/app/entrypoint.sh"]
+    command:
+      - sh
+      - -c
+      - |
+        if [ ! -f /app/entrypoint.sh ]; then
+          wget -q -O /app/entrypoint.sh https://raw.githubusercontent.com/rohjagad/cf-auto-custom-hostname/main/entrypoint.sh
+        fi
+        exec sh /app/entrypoint.sh
     networks:
       - common-overlay
     deploy:
