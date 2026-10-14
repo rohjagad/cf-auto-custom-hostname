@@ -16,6 +16,13 @@ if [ ! -f "$DATA_DIR/state.json" ]; then
 fi
 chmod 600 "$DATA_DIR/state.json" 2>/dev/null || true
 
+case "${BOT_TOKEN:-}" in
+  ""*"PASTE_"*)
+    echo "ERROR: set BOT_TOKEN and ALLOWED_CHAT_IDS in docker-compose.yml / docker-swarm.yml first." >&2
+    exit 1
+    ;;
+esac
+
 if [ ! -f "$APP_DIR/requirements.txt" ]; then
   echo "App source missing in $APP_DIR — fetching from $APP_REPO_URL ..."
   if [ -z "$APP_REPO_URL" ]; then

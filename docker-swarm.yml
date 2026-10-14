@@ -4,8 +4,8 @@ services:
   bot:
     image: python:3-alpine
     environment:
-      BOT_TOKEN: "8558513328:AAE2V0DFl8CwxEcizxaO7HRmO-Ku5ARj80M"
-      ALLOWED_CHAT_IDS: "6713772874"
+      BOT_TOKEN: "PASTE_TELEGRAM_BOT_TOKEN_HERE"
+      ALLOWED_CHAT_IDS: "PASTE_TELEGRAM_CHAT_ID_HERE"
       DATA_DIR: /data
       APP_DIR: /app
       # APP_REPO_URL: https://github.com/rohjagad/cf-auto-custom-hostname.git
